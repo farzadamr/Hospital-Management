@@ -81,5 +81,48 @@ namespace Services.Services
                 return new ResultDto<PersonDto?>(person, true, "The Person Was Found");
             }
         }
+        public async Task<ResultDto<List<PersonDto>?>> GetPersonListAsync(string nationalCode)
+        {
+            IEnumerable<PersonDto> personsEnum;
+            using(SqlConnection connection = new SqlConnection(_connection))
+            {
+                if (string.IsNullOrWhiteSpace(nationalCode))
+                {
+                    personsEnum = await connection.QueryAsync<PersonDto>(
+                        "GetPersonList",
+                        commandType: CommandType.StoredProcedure
+                        );
+                }
+                else
+                {
+                    personsEnum = await connection.QueryAsync<PersonDto>(
+                        "SearchPerson",
+                        new { SearchKey = nationalCode },
+                        commandType: CommandType.StoredProcedure
+                        );
+                }
+                if (personsEnum == null)
+                    return new ResultDto<List<PersonDto>?>(null, false, "No Person Found");
+                var personsList = personsEnum.ToList();
+                return new ResultDto<List<PersonDto>?>(personsList, true, "Persons Found");
+            }
+        }
+        public async Task<ResultDto> DeletePersonAsync(string nationalCode)
+        {
+            using(SqlConnection connection = new SqlConnection(_connection))
+            {
+                using(SqlCommand command = new SqlCommand("DeletePerson", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("Id", nationalCode);
+
+                    await connection.OpenAsync();
+                    int rows = await command.ExecuteNonQueryAsync();
+                    if (rows > 0)
+                        return new ResultDto(true, $"Person {nationalCode} Deleted Successfully");
+                    return new ResultDto(false, "Error in Execute Stored Procedure:(");
+                }
+            }
+        }
     }
 }

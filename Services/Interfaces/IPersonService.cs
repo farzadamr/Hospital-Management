@@ -12,5 +12,7 @@ namespace Services.Interfaces
         Task<ResultDto> AddPersonAsync(PersonDto person);
         Task<ResultDto> EditPersonAsync(PersonDto person);
         Task<ResultDto<PersonDto?>> GetPersonAsync(string nationalCode);
+        Task<ResultDto<List<PersonDto>?>> GetPersonListAsync(string nationalCode);
+        Task<ResultDto> DeletePersonAsync(string nationalCode);
     }
 }
