@@ -12,6 +12,7 @@ namespace End_Point.Admin.Pages.Person
         {
             this.personService = personService;
         }
+        public List<PersonDto> PersonsList { get; set; }
         public ResultDto result { get; set; }
         [BindProperty]
         public PersonDto editPersonModel { get; set; }
@@ -21,9 +22,17 @@ namespace End_Point.Admin.Pages.Person
         {
             result = new ResultDto(false, "");
         }
-        public async Task<IActionResult> OnPostGetList(string SearchKey)
+        public async Task<IActionResult> OnPostGetList(string SearchKey = null)
         {
-            var persons = await personService.
+            var persons = await personService.GetPersonListAsync(SearchKey);
+            if (!persons.iSuccess)
+            {
+                result = new ResultDto(false, persons.Message);
+                return Page();
+            }
+            PersonsList = persons.Data;
+            return Page();
+
         }
     }
 }
