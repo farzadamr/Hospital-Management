@@ -10,5 +10,7 @@ namespace Services.Interfaces
     public interface IPersonService
     {
         Task<ResultDto> AddPersonAsync(PersonDto person);
+        Task<ResultDto> EditPersonAsync(PersonDto person);
+        Task<ResultDto<PersonDto?>> GetPersonAsync(string nationalCode);
     }
 }

@@ -3,6 +3,7 @@
 @{
 }
 <div class="container-fluid">
+    <h5 class="title">Add Person Form</h5>
     <form method="post" class="mx-auto my-5" style="max-width: 600px;">
         <div class="form-group">
             <label asp-for="personModel.NationalCode">NationalCode</label>
@@ -25,7 +26,7 @@
             <span asp-validation-for="personModel.Password" class="text-danger"></span>
         </div>
 
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-success">Save</button>
     </form>
 </div>
 

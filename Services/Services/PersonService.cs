@@ -44,6 +44,29 @@ namespace Services.Services
                 }
             }
         }
+        public async Task<ResultDto> EditPersonAsync(PersonDto person)
+        {
+            using (SqlConnection connection = new SqlConnection(_connection))
+            {
+                using (SqlCommand command = new SqlCommand("UpdatePerson", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("NationalCode", person.NationalCode);
+                    command.Parameters.AddWithValue("FirstName", person.FirstName);
+                    command.Parameters.AddWithValue("LastName", person.LastName);
+                    command.Parameters.AddWithValue("Password", person.Password);
+
+                    await connection.OpenAsync();
+                    int rows = await command.ExecuteNonQueryAsync();
+                    if (rows > 0)
+                    {
+                        return new ResultDto(true, "person edited successfully!");
+                    }
+                    return new ResultDto(false, "Error in Execute Stored Procedure:(");
+
+                }
+            }
+        }
         public async Task<ResultDto<PersonDto?>> GetPersonAsync(string nationalCode)
         {
             using(SqlConnection connection = new SqlConnection(_connection))
