@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/End-Point.Admin/wwwroot/css/Bootstrap.css
+/End-Point.Admin/wwwroot/js/bootstrap.min.js
