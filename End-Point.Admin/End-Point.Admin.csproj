@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>End_Point.Website</RootNamespace>
+    <RootNamespace>End_Point.Admin</RootNamespace>
   </PropertyGroup>
 
 </Project>
