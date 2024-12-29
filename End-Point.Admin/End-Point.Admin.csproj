@@ -7,4 +7,8 @@
     <RootNamespace>End_Point.Admin</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Services\Services.csproj" />
+  </ItemGroup>
+
 </Project>
