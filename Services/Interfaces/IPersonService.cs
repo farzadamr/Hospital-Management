@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Services.Dtos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace Services.Interfaces
 {
     public interface IPersonService
     {
-        Task<>
+        Task<ResultDto> AddPersonAsync(PersonDto person);
     }
 }
