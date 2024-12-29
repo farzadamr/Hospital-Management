@@ -1,8 +1,10 @@
+using End_Point.Admin.ServiceInjector;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-
+builder.Services.InjectServices(builder.Configuration);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

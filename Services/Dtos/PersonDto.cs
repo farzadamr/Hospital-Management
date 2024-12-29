@@ -8,7 +8,7 @@ namespace Services.Dtos
 {
     public class PersonDto
     {
-        public int NationalCode { get; set; }
+        public string NationalCode { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Password { get; set; }

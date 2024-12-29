@@ -2,3 +2,56 @@
 @model End_Point.Admin.Pages.Person.CreateModel
 @{
 }
+<div class="container-fluid">
+    <form method="post" class="mx-auto my-5" style="max-width: 600px;">
+        <div class="form-group">
+            <label asp-for="personModel.NationalCode">NationalCode</label>
+            <input asp-for="personModel.NationalCode" class="form-control" />
+            <span asp-validation-for="personModel.NationalCode" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="personModel.FirstName">First Name</label>
+            <input asp-for="personModel.FirstName" class="form-control" />
+            <span asp-validation-for="personModel.FirstName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="personModel.LastName">Last Name</label>
+            <input asp-for="personModel.LastName" class="form-control" />
+            <span asp-validation-for="personModel.LastName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="personModel.Password">Password</label>
+            <input asp-for="personModel.Password" class="form-control" />
+            <span asp-validation-for="personModel.Password" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    @if (Model.result.iSuccess && !string.IsNullOrWhiteSpace(Model.result.Message))
+    {
+        <script>
+            swal.fire({
+                title: "Success",
+                text: "@Html.Raw(Model.result.Message)",
+                icon: "success"
+            });
+        </script>
+    }
+    else if (!Model.result.iSuccess && !string.IsNullOrWhiteSpace(Model.result.Message))
+    {
+        <script>
+            swal.fire({
+                title: "error",
+                text: "@Html.Raw(Model.result.Message)",
+                icon: "error"
+            });
+        </script>
+    }
+}
+
+
