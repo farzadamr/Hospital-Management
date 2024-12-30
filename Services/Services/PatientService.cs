@@ -37,5 +37,16 @@ namespace Services.Services
                 return new ResultDto(true, $"Patient {string.Join("", patId)} Added Successfully");
             }
         }
+
+        public async Task<ResultDto<List<PatientsListDto>?>> GetPatientListAsync()
+        {
+            using(SqlConnection connection = new SqlConnection(_connection))
+            {
+                var patientsEnum = await connection.QueryAsync<PatientsListDto>("GetPatientList", commandType: CommandType.StoredProcedure);
+                if (patientsEnum == null)
+                    return new ResultDto<List<PatientsListDto>?>(null, false, "Error in Executing SP");
+                return new ResultDto<List<PatientsListDto>?>(patientsEnum.ToList(), true, "Fetching Successfully");
+            }
+        }
     }
 }

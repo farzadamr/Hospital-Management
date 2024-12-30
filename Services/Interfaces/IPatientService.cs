@@ -10,5 +10,6 @@ namespace Services.Interfaces
     public interface IPatientService
     {
         Task<ResultDto> AddPatientAsync(PatientDto patient);
+        Task<ResultDto<List<PatientsListDto>?>> GetPatientListAsync();
     }
 }
