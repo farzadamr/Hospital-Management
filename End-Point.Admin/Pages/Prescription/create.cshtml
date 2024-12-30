@@ -1,0 +1,57 @@
+﻿@page
+@model End_Point.Admin.Pages.Prescription.createModel
+@{
+}
+<div class="container-fluid">
+    <h5 class="title text-center">Add Department Form</h5>
+    <div class="row justify-content-center">
+
+        <div class="card col-8" style="margin: 10px 0px;">
+            <div class="card-body">
+                <form method="post" class=" row justify-content-center">
+                    <div class="form-group col-4">
+                        <label asp-for="addPrescriptionModel.DESCRIPTION"> Description </label>
+                        <input asp-for="addPrescriptionModel.DESCRIPTION" class="form-control" />
+                        <span asp-validation-for="addPrescriptionModel.DESCRIPTION" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-4">
+                        <label asp-for="addPrescriptionModel.DOCTORID">Doctor ID</label>
+                        <select asp-for="addPrescriptionModel.DOCTORID" asp-items="Model.DoctorsList" class="form-control">
+                            <option>Select Doctor</option>
+                        </select>
+                        <span asp-validation-for="addPrescriptionModel.DOCTORID" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-4">
+                        <label asp-for="addPrescriptionModel.PATIENTID"> Patient ID</label>
+                        <input type="number" asp-for="addPrescriptionModel.PATIENTID" class="form-control" />
+                        <span asp-validation-for="addPrescriptionModel.PATIENTID" class="text-danger"></span>
+                    </div>
+                    <button class="btn btn-primary mt-5" type="submit">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    @if (Model.result.iSuccess && !string.IsNullOrWhiteSpace(Model.result.Message))
+    {
+        <script>
+            swal.fire({
+                title: "Success",
+                text: "@Html.Raw(Model.result.Message)",
+                icon: "success"
+            });
+        </script>
+    }
+    else if (!Model.result.iSuccess && !string.IsNullOrWhiteSpace(Model.result.Message))
+    {
+        <script>
+            swal.fire({
+                title: "error",
+                text: "@Html.Raw(Model.result.Message)",
+                icon: "error"
+            });
+        </script>
+    }
+}

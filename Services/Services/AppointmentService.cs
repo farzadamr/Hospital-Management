@@ -83,5 +83,68 @@ namespace Services.Services
                 }
             }
         }
+        public async Task<ResultDto> AddPrescriptionAsync(PrescriptionDto prescription)
+        {
+            using (SqlConnection connection = new SqlConnection(_connection))
+            {
+                var appId = await connection.QueryAsync<int>("InsertPrescription", new
+                {
+                    DOCTORID = prescription.DOCTORID,
+                    DESCRIPTION = prescription.DESCRIPTION,
+                    PATIENTID = prescription.PATIENTID
+                }, commandType: CommandType.StoredProcedure);
+
+                if (appId == null)
+                    return new ResultDto(false, "Error in Execute SP");
+                return new ResultDto(true, "Prescription Added Successfully");
+            }
+        }
+        public async Task<ResultDto> EditPrescriptionAsync(PrescriptionDto Prescription)
+        {
+            using (SqlConnection connection = new SqlConnection(_connection))
+            {
+                using (SqlCommand command = new SqlCommand("UpdatePrescription", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("ID", Prescription.ID);
+                    command.Parameters.AddWithValue("DESCRIPTION", Prescription.DESCRIPTION);
+                    await connection.OpenAsync();
+                    int rows = await command.ExecuteNonQueryAsync();
+                    if (rows > 0)
+                        return new ResultDto(true, "Prescription Edited Successfully");
+                    return new ResultDto(false, "Error in Executing SP");
+                }
+            }
+        }
+        public async Task<ResultDto> DeletePrescriptionAsync(int PrescriptionId)
+        {
+            using (SqlConnection connection = new SqlConnection(_connection))
+            {
+                using (SqlCommand command = new SqlCommand("DeletePrescription", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("ID", PrescriptionId);
+                    await connection.OpenAsync();
+                    int rows = await command.ExecuteNonQueryAsync();
+                    if (rows > 0)
+                        return new ResultDto(true, "Prescription Deleted Successfully");
+                    return new ResultDto(false, "Error in Executing SP");
+                }
+            }
+        }
+        public async Task<ResultDto<List<PrescriptionListDto>?>> GetPrescriptionListAsync()
+        {
+            IEnumerable<PrescriptionListDto> PrescriptionsEnum;
+            using (SqlConnection connection = new SqlConnection(_connection))
+            {
+                PrescriptionsEnum = await connection.QueryAsync<PrescriptionListDto>(
+                    "GetPrescriptionList",
+                    commandType: CommandType.StoredProcedure
+                    );
+                if (PrescriptionsEnum == null)
+                    return new ResultDto<List<PrescriptionListDto>?>(null, false, "Prescription Don't Found");
+                return new ResultDto<List<PrescriptionListDto>?>(PrescriptionsEnum.ToList(), true, "Prescriptions Found");
+            }
+        }
     }
 }

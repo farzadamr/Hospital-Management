@@ -76,6 +76,18 @@ namespace Services.Services
                 }
             }
         }
+
+        public async Task<ResultDto<PatientDto?>> GetPatientAsync(int patientId)
+        {
+            using (SqlConnection connection = new SqlConnection(_connection))
+            {
+                var patient = await connection.QuerySingleOrDefaultAsync<PatientDto>("GetPatient",new { ID = patientId }, commandType: CommandType.StoredProcedure);
+                if (patient == null)
+                    return new ResultDto<PatientDto?>(null, false, "dont found");
+                return new ResultDto<PatientDto?>(patient, true, "found Successfully");
+            }
+        }
+
         public async Task<ResultDto<List<PatientsListDto>?>> GetPatientListAsync()
         {
             using(SqlConnection connection = new SqlConnection(_connection))

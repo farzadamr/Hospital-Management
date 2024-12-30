@@ -13,5 +13,6 @@ namespace Services.Interfaces
         Task<ResultDto> EditPatientAsync(PatientDto patient);
         Task<ResultDto> DeletePatientAsync(int patientId);
         Task<ResultDto<List<PatientsListDto>?>> GetPatientListAsync();
+        Task<ResultDto<PatientDto?>> GetPatientAsync(int patientId);
     }
 }
