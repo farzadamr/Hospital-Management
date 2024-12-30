@@ -16,8 +16,7 @@ namespace End_Point.Admin.Pages.Person
         public ResultDto result { get; set; }
         [BindProperty]
         public PersonDto editPersonModel { get; set; }
-        [BindProperty]
-        public string personId { get; set; }
+
         public void OnGet()
         {
             result = new ResultDto(false, "");
@@ -31,6 +30,30 @@ namespace End_Point.Admin.Pages.Person
                 return Page();
             }
             PersonsList = persons.Data;
+            result = new ResultDto(true, "");
+            return Page();
+
+        }
+        public async Task<IActionResult> OnPostEditPersonAsync()
+        {
+            if (!TryValidateModel(editPersonModel))
+            {
+                result = new ResultDto(false, "The Fields is required");
+                return Page();
+            }
+            var editResult = await personService.EditPersonAsync(editPersonModel);
+            result = editResult;
+            return Page();
+        }
+        public async Task<IActionResult> OnPostDeletePersonAsync(string personId)
+        {
+            if (string.IsNullOrWhiteSpace(personId)) 
+            {
+                result = new ResultDto(false, "Error in receive data!");
+                return Page();
+            }
+            var DeleteResult = await personService.DeletePersonAsync(personId);
+            result = DeleteResult;
             return Page();
 
         }

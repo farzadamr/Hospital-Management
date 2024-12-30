@@ -209,8 +209,6 @@ body {
     justify-content: center;
     align-items: center;
     margin-bottom: 20px;
-    animation: fadeIn 1s ease-in-out forwards;
-    opacity: 0;
 }
 
 .container-fluid {
@@ -227,6 +225,21 @@ body {
     }
 }
 
+.sidebar {
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    background-color: #f8f9fa;
+    padding: 15px;
+}
+
+    .sidebar .nav-link {
+        padding: 10px 15px;
+    }
+
+
 .title {
     color: #4723D9;
     display: inline-block;
@@ -237,4 +250,21 @@ body {
     translate: -50%;
     margin-bottom: 30px;
 }
+.modal-backdrop.show.fade {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 0;
+    background-color: #000;
+    animation: fadeInBack 1s ease-in-out forwards;
+    opacity : 0;
+}
+
+.modal.show.fade {
+    z-index: 1;
+    margin: 50px 0px;
+}
+
 

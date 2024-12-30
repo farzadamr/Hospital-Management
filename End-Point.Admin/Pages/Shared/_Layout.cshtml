@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="~/css/Style.css" rel="stylesheet">
-    <link rel="stylesheet" href="~/css/Bootstrap.css">
+    <link href="~/css/Stylesh.css" rel="stylesheet">
+    <link href="~/css/Bootstrap.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     @if (string.IsNullOrWhiteSpace(ViewData["Title"] as string))
     {
@@ -15,6 +15,7 @@
         <title>@ViewData["Title"]</title>
     }
     <style>
+
         .sidebar {
             height: 100vh;
             position: fixed;
@@ -25,9 +26,11 @@
             padding: 15px;
         }
 
-            .sidebar .nav-link {
+        .sidebar .nav-link {
                 padding: 10px 15px;
-            }
+        }
+
+
     </style>
 </head>
 <body id="body-pd">
@@ -87,22 +90,42 @@
     <!--Container Main start-->
     @RenderBody()
     <!--Container Main end-->
+
+    <script src="~/asset/js/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/asset/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/asset/bootstrap/js/popper.min.js"></script>
     <script src="~/js/Layout.js"></script>
+    
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const navLinks = document.querySelectorAll('.nav_link');
-            navLinks.forEach(link => {
-                link.addEventListener('click', function () {
-                    navLinks.forEach(link => link.classList.remove('active'));
-                    this.classList.add('active');
-                });
-            });
+        document.addEventListener("DOMContentLoaded", function (event) {
+
+            const showNavbar = (toggleId, navId, bodyId, headerId) => {
+                const toggle = document.getElementById(toggleId),
+                    nav = document.getElementById(navId),
+                    bodypd = document.getElementById(bodyId),
+                    headerpd = document.getElementById(headerId)
+
+                // Validate that all variables exist
+                if (toggle && nav && bodypd && headerpd) {
+                    toggle.addEventListener('click', () => {
+                        // show navbar
+                        nav.classList.toggle('show')
+                        // change icon
+                        toggle.classList.toggle('bx-x')
+                        // add padding to body
+                        bodypd.classList.toggle('body-pd')
+                        // add padding to header
+                        headerpd.classList.toggle('body-pd')
+                    })
+                }
+            }
+
+            showNavbar('header-toggle', 'nav-bar', 'body-pd', 'header')
+
         });
     </script>
-    
-    <script src="~/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     @RenderSection("Scripts", false)
 </body>
+
 </html>
