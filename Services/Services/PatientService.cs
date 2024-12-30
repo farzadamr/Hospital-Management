@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -38,6 +39,43 @@ namespace Services.Services
             }
         }
 
+        public async Task<ResultDto> DeletePatientAsync(int patientId)
+        {
+            using (SqlConnection connection = new SqlConnection(_connection))
+            {
+                using (SqlCommand command = new SqlCommand("DeletePatient", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("Id", patientId);
+                    await connection.OpenAsync();
+                    int rows = await command.ExecuteNonQueryAsync();
+                    if (rows > 0)
+                        return new ResultDto(true, "Patient Deleted Successfully");
+                    return new ResultDto(false, "Error Executing SP");
+                }
+            }
+        }
+
+        public async Task<ResultDto> EditPatientAsync(PatientDto patient)
+        {
+            using (SqlConnection connection = new SqlConnection(_connection))
+            {
+                using (SqlCommand command = new SqlCommand("UpdatePatient", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("ID", patient.ID);
+                    command.Parameters.AddWithValue("BIRTH_DATE", patient.BIRTH_DATE);
+                    command.Parameters.AddWithValue("GENDER", patient.GENDER);
+                    command.Parameters.AddWithValue("BLOOD_TYPE", patient.BLOOD_TYPE);
+
+                    await connection.OpenAsync();
+                    int rows = await command.ExecuteNonQueryAsync();
+                    if (rows > 0)
+                        return new ResultDto(true, $"Patient {string.Join("", patient.ID)} Edited Successfully");
+                    return new ResultDto(false, "Error Execute SP");
+                }
+            }
+        }
         public async Task<ResultDto<List<PatientsListDto>?>> GetPatientListAsync()
         {
             using(SqlConnection connection = new SqlConnection(_connection))

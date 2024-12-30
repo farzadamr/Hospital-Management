@@ -29,7 +29,7 @@
                                         <td>@patient.ID</td>
                                         <td>@patient.FirstName</td>
                                         <td>@patient.LastName</td>
-                                        <td>@patient.GENDER</td>
+                                        <td>@(patient.GENDER ? "Male" : "Female" )</td>
                                         <td>@patient.BIRTH_DATE.Date</td>
                                         <td>@patient.BLOOD_TYPE</td>
                                         <td>
@@ -43,7 +43,7 @@
                                                 <div class="modal-body">
                                                     <form method="post" asp-page-handler="EditPat">
                                                         <input type="hidden" asp-for="editPatModel.ID" value="@patient.ID" readonly />
-                                                        <input type="hidden" asp-for="editPatModel.NATIONALCODE" value="@patient.NATIONALCODE" readonly />
+                                                        
                                                         <div class="form-group">
                                                             <label>BirthDate</label>
                                                             <input type="text" class="form-control" value="@patient.BIRTH_DATE" disabled/>
@@ -66,8 +66,8 @@
                                                         <div class="form-group">
                                                             <label>Gender</label>
                                                             <select class="form-control" asp-for="editPatModel.GENDER">
-                                                                <option>Male</option>
-                                                                <option>Female</option>
+                                                                <option value="1">Male</option>
+                                                                <option value="0">Female</option>
                                                             </select>
                                                         </div>
                                                         <button type="submit" class="btn btn-primary">Save</button>

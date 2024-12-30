@@ -17,7 +17,7 @@ namespace End_Point.Admin.Pages.Patient
 
         public ResultDto result { get; set; }
         [BindProperty]
-        public PatientDto editPatModel { get; set; }
+        public EditPatientDto editPatModel { get; set; }
 
         public async Task OnGetAsync()
         {
@@ -26,28 +26,43 @@ namespace End_Point.Admin.Pages.Patient
             PatientsList = pats.Data;
 
         }
-        //public async Task<IActionResult> OnPostEditDoctorAsync()
-        //{
+        public async Task<IActionResult> OnPostEditPatAsync()
+        {
+            if (!ModelState.IsValid)
+            {
+                result = new ResultDto(false, "Complete The Model");
+                return Page();
+            }
+            PatientDto patientModel = new PatientDto
+            {
+                ID = editPatModel.ID,
+                BLOOD_TYPE = editPatModel.BLOOD_TYPE,
+                BIRTH_DATE = editPatModel.BIRTH_DATE,
+                GENDER = editPatModel.GENDER == 1 ? true : false
+            };
+            var editResult = await patientService.EditPatientAsync(patientModel);
+            result = editResult;
+            return Redirect("/patient/list");
+        }
+        public async Task<IActionResult> OnPostDeletePatAsync(int PatId)
+        {
+            if (PatId != null)
+            {
+                var deleteResult = await patientService.DeletePatientAsync(PatId);
+                result = deleteResult;
+                return Redirect("/patient/list");
+            }
+            result = new ResultDto(false, "Error in Database");
+            return Page();
+        }
+    }
 
-        //    if (!ModelState.IsValid)
-        //    {
-        //        result = new ResultDto(false, "Complete The Model");
-        //        return Page();
-        //    }
-        //    var editResult = await doctorService.EditDoctorAsync(editDoctorModel);
-        //    result = editResult;
-        //    return Redirect("/doctor/list");
-        //}
-        //public async Task<IActionResult> OnPostDeleteDoctorAsync(int DoctorId)
-        //{
-        //    if (DoctorId != null)
-        //    {
-        //        var deleteResult = await doctorService.DeleteDoctorAsync(DoctorId);
-        //        result = deleteResult;
-        //        return Redirect("/doctor/list");
-        //    }
-        //    result = new ResultDto(false, "Error in Database");
-        //    return Page();
-        //}
+    public class EditPatientDto
+    {
+        public int ID { get; set; }
+        public DateTime BIRTH_DATE { get; set; }
+        public int GENDER { get; set; }
+        public string BLOOD_TYPE { get; set; }
     }
 }
+
