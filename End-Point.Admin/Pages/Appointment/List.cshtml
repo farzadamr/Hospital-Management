@@ -1,0 +1,116 @@
+﻿@page
+@model End_Point.Admin.Pages.Appointment.ListModel
+@{
+    ViewData["title"] = "Appointment";
+}
+<div class="container-fluid">
+    <h5 class="title text-center">Appointment's List</h5>
+    <div class="row justify-content-center">
+        @if (Model.AppointmentsList != null)
+        {
+            <div class="card" style="margin-top:50px;">
+                <div class="card-body">
+                    <div class="container">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Doctor's Name</th>
+                                    <th>Department</th>
+                                    <th>Time</th>
+                                    <th>Description</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var app in Model.AppointmentsList)
+                                {
+                                    <tr>
+                                        <td>@app.ID</td>
+                                        <td>@app.FirstName @app.LastName</td>
+                                        <td>@app.Department</td>
+                                        <td>@app.TIME_</td>
+                                        <td>@app.DESCRIPTIONN</td>
+                                        <td>
+                                            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModal-@app.ID">Edit</button>
+                                            <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal-@app.ID">Delete</button>
+                                        </td>
+                                    </tr>
+                                    <div class="modal fade" id="editModal-@app.ID" tabindex="-1" role="dialog" aria-labelledby="editModalLabel-@app.ID" aria-hidden="true">
+                                        <div class="modal-dialog" role="dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    <form method="post" asp-page-handler="EditApp">
+                                                        <input type="hidden" asp-for="editAppointmentModel.ID" value="@app.ID" readonly />
+                                                        <input type="hidden" asp-for="editAppointmentModel.DOCTORID" value="@app.DOCTORID" readonly />
+                                                        <div class="form-group">
+                                                            <label>Description</label>
+                                                            <input type="text" class="form-control" asp-for="editAppointmentModel.DESCRIPTIONN" value="@app.DESCRIPTIONN" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Time</label>
+                                                            <input type="text" class="form-control" value="@app.TIME_" disabled/>
+                                                            <input type="datetime-local" class="form-control" asp-for="editAppointmentModel.TIME_"/>
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary">Save</button>
+
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal fade" id="deleteModal-@app.ID" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel-@app.ID" aria-hidden="true">
+                                        <div class="modal-dialog" role="alert">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    Are you sure you want to delete Appointment @app.FirstName @app.LastName?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <form method="post" asp-page-handler="DeleteApp">
+                                                        <input type="hidden" name="appId" value="@app.ID" />
+                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        }
+
+
+
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    @if (Model.result.iSuccess && !string.IsNullOrWhiteSpace(Model.result.Message))
+    {
+        <script>
+            swal.fire({
+                title: "Success",
+                text: "@Html.Raw(Model.result.Message)",
+                icon: "success"
+            });
+        </script>
+    }
+    else if (!Model.result.iSuccess && !string.IsNullOrWhiteSpace(Model.result.Message))
+    {
+        <script>
+            swal.fire({
+                title: "error",
+                text: "@Html.Raw(Model.result.Message)",
+                icon: "error"
+            });
+        </script>
+    }
+}
