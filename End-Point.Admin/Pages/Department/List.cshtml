@@ -1,0 +1,110 @@
+﻿@page
+@model End_Point.Admin.Pages.Department.ListModel
+@{
+}
+<div class="container-fluid">
+    <h5 class="title text-center">Department's List</h5>
+    <div class="row justify-content-center">
+        @if (Model.DepartmentsList != null)
+        {
+            <div class="card" style="margin-top:50px;">
+                <div class="card-body">
+                    <div class="container">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var dep in Model.DepartmentsList)
+                                {
+                                    <tr>
+                                        <td>@dep.ID</td>
+                                        <td>@dep.TITLE</td>
+                                        <td>@dep.DESCRIPTION_</td>
+                                        <td>
+                                            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModal-@dep.ID">Edit</button>
+                                            <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal-@dep.ID">Delete</button>
+                                        </td>
+                                    </tr>
+                                    <div class="modal fade" id="editModal-@dep.ID" tabindex="-1" role="dialog" aria-labelledby="editModalLabel-@dep.ID" aria-hidden="true">
+                                        <div class="modal-dialog" role="dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    <form method="post" asp-page-handler="EditDep">
+                                                        <input type="hidden" asp-for="editDepartmentModel.ID" value="@dep.ID" readonly />
+                                                        <div class="form-group">
+                                                            <label>Rate</label>
+                                                            <input type="text" class="form-control" asp-for="editDepartmentModel.TITLE" value="@dep.TITLE" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Resume</label>
+                                                            <input type="text" class="form-control" asp-for="editDepartmentModel.DESCRIPTION_" value="@dep.DESCRIPTION_" />
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary">Save</button>
+
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal fade" id="deleteModal-@dep.ID" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel-@dep.ID" aria-hidden="true">
+                                        <div class="modal-dialog" role="alert">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    Are you sure you want to delete @dep.TITLE?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <form method="post" asp-page-handler="DeleteDep">
+                                                        <input type="hidden" name="departmentId" value="@dep.ID" />
+                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        }
+
+
+
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    @if (Model.result.iSuccess && !string.IsNullOrWhiteSpace(Model.result.Message))
+    {
+        <script>
+            swal.fire({
+                title: "Success",
+                text: "@Html.Raw(Model.result.Message)",
+                icon: "success"
+            });
+        </script>
+    }
+    else if (!Model.result.iSuccess && !string.IsNullOrWhiteSpace(Model.result.Message))
+    {
+        <script>
+            swal.fire({
+                title: "error",
+                text: "@Html.Raw(Model.result.Message)",
+                icon: "error"
+            });
+        </script>
+    }
+
+}
