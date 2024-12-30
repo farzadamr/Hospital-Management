@@ -30,7 +30,7 @@
                 <div class="card-body">
                     <form method="post" asp-page-handler="AddDoctor">
                         <input type="hidden" value="@Model.PersonId" asp-for="addDoctorModel.PersonId" />
-                        <div class="form-row d-flex flex-wrap">
+                        <div class="row">
                             <div class="form-group col-md-4 mb-3">
                                 <label asp-for="addDoctorModel.M_S_N">Medical Licence Number</label>
                                 <input asp-for="addDoctorModel.M_S_N" class="form-control" />
