@@ -20,6 +20,10 @@ namespace End_Point.Admin.ServiceInjector
             {
                 return new DepartmentService(connectionString);
             });
+            services.AddTransient<IPatientService>(provider =>
+            {
+                return new PatientService(connectionString);
+            });
             return services;
         }
     }

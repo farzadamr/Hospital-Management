@@ -1,0 +1,97 @@
+﻿@page
+@model End_Point.Admin.Pages.Patient.CreateModel
+@{
+}
+<div class="container-fluid">
+    <h5 class="title text-center">Add Doctor Form</h5>
+    <div class="row justify-content-center">
+
+        <div class="card col-8" style="margin: 10px 0px;">
+            <div class="card-body">
+                <form method="post" asp-page-handler="FindPerson">
+                    <label class="mr-2">National Code</label>
+                    <div class="form-group d-flex align-items-center">
+                        <input type="text" name="NationalCode" class="form-control mr-2" placeholder="National code">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
+                @if (!string.IsNullOrWhiteSpace(Model.FullName))
+                {
+                    <div class="form-control mt-2">
+                        <label>Person's Name</label>
+                        <input value="@Model.FullName" disabled class="form-control" />
+                    </div>
+                }
+            </div>
+        </div>
+        @if (!string.IsNullOrWhiteSpace(Model.FullName))
+        {
+            <div class="card col-8">
+                <div class="card-body">
+                    <form method="post" asp-page-handler="AddPat">
+                        <input type="hidden" value="@Model.PersonId" asp-for="addPatModel.NATIONALCODE" />
+                        <div class="row">
+                            <div class="form-group col-md-4 mb-3">
+                                <label asp-for="addPatModel.BIRTH_DATE">Birth Date</label>
+                                <input type="date" asp-for="addPatModel.BIRTH_DATE" class="form-control" />
+                                <span asp-validation-for="addPatModel.BIRTH_DATE" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-4 mb-3 ml-md-3">
+                                <label asp-for="addPatModel.BLOOD_TYPE">Blood Type</label>
+                                <select asp-for="addPatModel.BLOOD_TYPE" class="form-control">
+                                    <option value="0">select</option>
+                                    <option>O+</option>
+                                    <option>O-</option>
+                                    <option>A+</option>
+                                    <option>A-</option>
+                                    <option>B+</option>
+                                    <option>B-</option>
+                                    <option>AB+</option>
+                                    <option>AB-</option>
+                                </select>
+                                <span asp-validation-for="addPatModel.BLOOD_TYPE" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-4 mb-3 ml-md-3">
+                                <label asp-for="addPatModel.GENDER">Gender</label>
+                                <select asp-for="addPatModel.GENDER" class="form-control">
+                                    <option value="1">Male</option>
+                                    <option value="0">Female</option>
+                                </select>
+                                <span asp-validation-for="addPatModel.GENDER" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success mt-3">Save</button>
+                    </form>
+
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    @if (Model.result.iSuccess && !string.IsNullOrWhiteSpace(Model.result.Message))
+    {
+        <script>
+            swal.fire({
+                title: "Success",
+                text: "@Html.Raw(Model.result.Message)",
+                icon: "success"
+            });
+        </script>
+    }
+    else if (!Model.result.iSuccess && !string.IsNullOrWhiteSpace(Model.result.Message))
+    {
+        <script>
+            swal.fire({
+                title: "error",
+                text: "@Html.Raw(Model.result.Message)",
+                icon: "error"
+            });
+        </script>
+    }
+}
+
