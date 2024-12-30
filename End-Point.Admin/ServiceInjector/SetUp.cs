@@ -12,6 +12,14 @@ namespace End_Point.Admin.ServiceInjector
             {
                 return new PersonService(connectionString);
             });
+            services.AddTransient<IDoctorService>(provider =>
+            {
+                return new DoctorService(connectionString);
+            });
+            services.AddTransient<IDepartmentService>(provider =>
+            {
+                return new DepartmentService(connectionString);
+            });
             return services;
         }
     }

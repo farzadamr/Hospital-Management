@@ -1,0 +1,90 @@
+﻿@page
+@model End_Point.Admin.Pages.Doctor.CreateModel
+@{
+}
+<div class="container-fluid">
+    <h5 class="title text-center">Add Doctor Form</h5>
+    <div class="row justify-content-center">
+
+        <div class="card col-8" style="margin: 10px 0px;">
+            <div class="card-body">
+                <form method="post" asp-page-handler="FindPerson">
+                    <label class="mr-2">National Code</label>
+                    <div class="form-group d-flex align-items-center">
+                        <input type="text" name="NationalCode" class="form-control mr-2" placeholder="National code">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
+                @if (!string.IsNullOrWhiteSpace(Model.FullName))
+                {
+                    <div class="form-control mt-2">
+                        <label>Person's Name</label>
+                        <input value="@Model.FullName" disabled class="form-control" />
+                    </div>
+                }
+            </div>
+        </div>
+        @if (!string.IsNullOrWhiteSpace(Model.FullName))
+        {
+            <div class="card col-8">
+                <div class="card-body">
+                    <form method="post" asp-page-handler="AddDoctor">
+                        <input type="hidden" value="@Model.PersonId" asp-for="addDoctorModel.PersonId" />
+                        <div class="form-row d-flex flex-wrap">
+                            <div class="form-group col-md-4 mb-3">
+                                <label asp-for="addDoctorModel.M_S_N">Medical Licence Number</label>
+                                <input asp-for="addDoctorModel.M_S_N" class="form-control" />
+                                <span asp-validation-for="addDoctorModel.M_S_N" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-4 mb-3 ml-md-3">
+                                <label asp-for="addDoctorModel.DEPARTMENTID">Department</label>
+                                <select asp-for="addDoctorModel.DEPARTMENTID" asp-items="Model.departments" class="form-control">
+                                    <option value="0">Select</option>
+                                </select>
+                                <span asp-validation-for="addDoctorModel.DEPARTMENTID" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-4 mb-3 ml-md-3">
+                                <label>Rate</label>
+                                <input asp-for="addDoctorModel.Rate" class="form-control" />
+                                <span asp-validation-for="addDoctorModel.Rate" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-12 mb-3">
+                                <label asp-for="addDoctorModel.RESUME_">Resume</label>
+                                <textarea asp-for="addDoctorModel.RESUME_" class="form-control" rows="2"></textarea>
+                                <span asp-validation-for="addDoctorModel.RESUME_" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success mt-3">Save</button>
+                    </form>
+
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    @if (Model.result.iSuccess && !string.IsNullOrWhiteSpace(Model.result.Message))
+    {
+        <script>
+            swal.fire({
+                title: "Success",
+                text: "@Html.Raw(Model.result.Message)",
+                icon: "success"
+            });
+        </script>
+    }
+    else if (!Model.result.iSuccess && !string.IsNullOrWhiteSpace(Model.result.Message))
+    {
+        <script>
+            swal.fire({
+                title: "error",
+                text: "@Html.Raw(Model.result.Message)",
+                icon: "error"
+            });
+        </script>
+    }
+}
