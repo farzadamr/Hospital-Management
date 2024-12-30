@@ -12,5 +12,6 @@ namespace Services.Interfaces
         Task<ResultDto> AddDoctorAsync(DoctorDto doctor);
         Task<ResultDto<List<DoctorsListDto>?>> GetDoctorListAsync();
         Task<ResultDto> EditDoctorAsync(DoctorDto doctor);
+        Task<ResultDto> DeleteDoctorAsync(int DoctorId);
     }
 }

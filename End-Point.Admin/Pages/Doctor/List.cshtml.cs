@@ -33,6 +33,7 @@ namespace End_Point.Admin.Pages.Doctor
         }
         public async Task<IActionResult> OnPostEditDoctorAsync()
         {
+
             if (!ModelState.IsValid)
             {
                 result = new ResultDto(false, "Complete The Model");
@@ -40,6 +41,17 @@ namespace End_Point.Admin.Pages.Doctor
             }
             var editResult = await doctorService.EditDoctorAsync(editDoctorModel);
             result = editResult;
+            return Redirect("/doctor/list");
+        }
+        public async Task<IActionResult> OnPostDeleteDoctorAsync(int DoctorId)
+        {
+            if(DoctorId != null)
+            {
+                var deleteResult = await doctorService.DeleteDoctorAsync(DoctorId);
+                result = deleteResult;
+                return Redirect("/doctor/list");
+            }
+            result = new ResultDto(false, "Error in Database");
             return Page();
         }
 
