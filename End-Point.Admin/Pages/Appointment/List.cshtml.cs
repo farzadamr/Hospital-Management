@@ -23,7 +23,7 @@ namespace End_Point.Admin.Pages.Appointment
         {
             var apps = await appointmentService.GetAppointmentListAsync();
             AppointmentsList = apps.Data;
-            result = new ResultDto(true, apps.Message);
+            result = new ResultDto(true, "");
 
         }
         public async Task<IActionResult> OnPostEditAppAsync()
@@ -35,7 +35,7 @@ namespace End_Point.Admin.Pages.Appointment
             }
             var editResult = await appointmentService.EditAppointmentAsync(editAppointmentModel);
             result = editResult;
-            return Redirect("/appointment/list");
+            return Page();
         }
         public async Task<IActionResult> OnPostDeleteAppAsync(int appId)
         {
@@ -43,7 +43,7 @@ namespace End_Point.Admin.Pages.Appointment
             {
                 var deleteResult = await appointmentService.DeleteAppointmentAsync(appId);
                 result = deleteResult;
-                return Redirect("/appointment/list");
+                return Page();
             }
             result = new ResultDto(false, "Error in Database");
             return Page();
