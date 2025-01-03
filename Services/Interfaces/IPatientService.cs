@@ -14,5 +14,9 @@ namespace Services.Interfaces
         Task<ResultDto> DeletePatientAsync(int patientId);
         Task<ResultDto<List<PatientsListDto>?>> GetPatientListAsync();
         Task<ResultDto<PatientDto?>> GetPatientAsync(int patientId);
+        Task<ResultDto<List<AddressDto>?>> GetAddressListAsync(int patientID);
+        Task<ResultDto> DeleteAddressAsync(int addressId);
+        Task<ResultDto> EditAddressAsync(AddressDto address);
+        Task<ResultDto> AddAddressAsync(AddressDto address);
     }
 }

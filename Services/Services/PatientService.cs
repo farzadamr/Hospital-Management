@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.Loader;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -96,6 +97,72 @@ namespace Services.Services
                 if (patientsEnum == null)
                     return new ResultDto<List<PatientsListDto>?>(null, false, "Error in Executing SP");
                 return new ResultDto<List<PatientsListDto>?>(patientsEnum.ToList(), true, "Fetching Successfully");
+            }
+        }
+        public async Task<ResultDto> AddAddressAsync(AddressDto address)
+        {
+            using (SqlConnection connection = new SqlConnection(_connection))
+            {
+                var addId = await connection.QueryAsync<int>(
+                    "InsertAddress",
+                    new
+                    {
+                        POSTALCODE = address.POSTALCODE,
+                        PELAK = address.PLAK,
+                        STREET = address.STREET,
+                        PATIENTID = address.PATIENTID
+                    }, commandType: CommandType.StoredProcedure
+                    );
+                if (addId == null)
+                    return new ResultDto(false, "Error Execute SP");
+                return new ResultDto(true, $"Address {string.Join("", addId)} Added Successfully");
+            }
+        }
+        public async Task<ResultDto> EditAddressAsync(AddressDto address)
+        {
+            using (SqlConnection connection = new SqlConnection(_connection))
+            {
+                using (SqlCommand command = new SqlCommand("UpdateAddress", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("ID", address.ID);
+                    command.Parameters.AddWithValue("PLAK", address.PLAK);
+                    command.Parameters.AddWithValue("STREET", address.STREET);
+                    command.Parameters.AddWithValue("POSTALCODE", address.POSTALCODE);
+
+                    await connection.OpenAsync();
+                    int rows = await command.ExecuteNonQueryAsync();
+                    if (rows > 0)
+                        return new ResultDto(true, $"Address {string.Join("", address.ID)} Edited Successfully");
+                    return new ResultDto(false, "Error Execute SP");
+                }
+            }
+        }
+        public async Task<ResultDto> DeleteAddressAsync(int addressId)
+        {
+            using (SqlConnection connection = new SqlConnection(_connection))
+            {
+                using (SqlCommand command = new SqlCommand("DeleteAddress", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("ID", addressId);
+
+                    await connection.OpenAsync();
+                    int rows = await command.ExecuteNonQueryAsync();
+                    if (rows > 0)
+                        return new ResultDto(true, $"Address {string.Join("", addressId)} Deleted Successfully");
+                    return new ResultDto(false, "Error Execute SP");
+                }
+            }
+        }
+        public async Task<ResultDto<List<AddressDto>?>> GetAddressListAsync(int patientID)
+        {
+            using (SqlConnection connection = new SqlConnection(_connection))
+            {
+                var addressEnum = await connection.QueryAsync<AddressDto>("GetAddressList", new { PID = patientID }, commandType: CommandType.StoredProcedure);
+                if (addressEnum == null)
+                    return new ResultDto<List<AddressDto>?>(null, false, "Error in Executing SP");
+                return new ResultDto<List<AddressDto>?>(addressEnum.ToList(), true, "Fetching Successfully");
             }
         }
     }
