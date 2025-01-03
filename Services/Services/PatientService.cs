@@ -126,7 +126,7 @@ namespace Services.Services
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.AddWithValue("ID", address.ID);
-                    command.Parameters.AddWithValue("PLAK", address.PLAK);
+                    command.Parameters.AddWithValue("PELAK", address.PLAK);
                     command.Parameters.AddWithValue("STREET", address.STREET);
                     command.Parameters.AddWithValue("POSTALCODE", address.POSTALCODE);
 
