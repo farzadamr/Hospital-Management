@@ -150,5 +150,66 @@ namespace Services.Services
                 }
             }
         }
+        public async Task<ResultDto> EditPhoneAsync(AddPhoneDto addPhoneModel)
+        {
+            using (SqlConnection connection = new SqlConnection(_connection))
+            {
+                using (SqlCommand command = new SqlCommand("EditTel", connection))
+                {
+                    try
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddWithValue("NATIONALCODE", addPhoneModel.NATIONALCODE);
+                        command.Parameters.AddWithValue("TEL", addPhoneModel.TEL);
+                        await connection.OpenAsync();
+                        int rows = await command.ExecuteNonQueryAsync();
+                        if (rows > 0)
+                            return new ResultDto(true, "PhoneNumber Edited Successfully");
+                        return new ResultDto(false, "Error in Editing PhoneNumber");
+                    }
+                    catch
+                    {
+                        return new ResultDto(false, $"This PhoneNumber Already Exist");
+                    }
+
+                }
+            }
+        }
+        public async Task<ResultDto> DeletePhoneAsync(AddPhoneDto addPhoneModel)
+        {
+            using (SqlConnection connection = new SqlConnection(_connection))
+            {
+                using (SqlCommand command = new SqlCommand("DeletePhone", connection))
+                {
+                    try
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddWithValue("NATIONALCODE", addPhoneModel.NATIONALCODE);
+                        command.Parameters.AddWithValue("TEL", addPhoneModel.TEL);
+                        await connection.OpenAsync();
+                        int rows = await command.ExecuteNonQueryAsync();
+                        if (rows > 0)
+                            return new ResultDto(true, "PhoneNumber Deleted Successfully");
+                        return new ResultDto(false, "Error in Deleting PhoneNumber");
+                    }
+                    catch
+                    {
+                        return new ResultDto(false, "Error");
+                    }
+
+                }
+            }
+        }
+        public async Task<ResultDto<List<string>?>> GetPhoneListAsync(string NationalCode)
+        {
+            using(SqlConnection connection = new SqlConnection(_connection))
+            {
+                var phones = await connection.QueryAsync<string>("GetPhoneList", new { NATIONALCODE = NationalCode }, commandType: CommandType.StoredProcedure);
+                if (phones == null)
+                    return new ResultDto<List<string>?>(null, false, "Phones Dont Found");
+                return new ResultDto<List<string>?>(phones.ToList(), true, "Data Found");
+                   
+            }
+        }
     }
 }

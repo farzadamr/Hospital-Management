@@ -15,5 +15,8 @@ namespace Services.Interfaces
         Task<ResultDto<List<PersonDto>?>> GetPersonListAsync(string nationalCode);
         Task<ResultDto> DeletePersonAsync(string nationalCode);
         Task<ResultDto> AddPhoneAsync(AddPhoneDto addPhoneModel);
+        Task<ResultDto> EditPhoneAsync(AddPhoneDto addPhoneModel);
+        Task<ResultDto> DeletePhoneAsync(AddPhoneDto addPhoneModel);
+        Task<ResultDto<List<string>?>> GetPhoneListAsync(string NationalCode);
     }
 }

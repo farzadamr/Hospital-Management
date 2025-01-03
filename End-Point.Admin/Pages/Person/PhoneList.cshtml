@@ -1,0 +1,122 @@
+﻿@page
+@model End_Point.Admin.Pages.Person.PhoneListModel
+@{
+}
+<div class="container-fluid">
+    <h5 class="title text-center">Add Phone To Person Form</h5>
+    <div class="row justify-content-center">
+
+        <div class="card col-8" style="margin: 10px 0px;">
+            <div class="card-body">
+                <form method="post" asp-page-handler="FindPerson">
+                    <label class="mr-2">National Code</label>
+                    <div class="form-group d-flex align-items-center">
+                        <input type="text" name="NationalCode" class="form-control mr-2" placeholder="National code">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
+                @if (!string.IsNullOrWhiteSpace(Model.FullName))
+                {
+                    <div class="form-control mt-2">
+                        <label>Person's Name</label>
+                        <input value="@Model.FullName" disabled class="form-control" />
+                    </div>
+                }
+            </div>
+        </div>
+        @if (!string.IsNullOrWhiteSpace(Model.FullName))
+        {
+            <div class="card col-8">
+                <div class="card-body">
+                    <div class="container">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Phone</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var phone in Model.PhoneList)
+                                {
+                                    <tr>
+                                        <td>@phone</td>
+                                        <td>
+                                            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModal-@phone">Edit</button>
+                                            <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal-@phone">Delete</button>
+                                        </td>
+                                    </tr>
+                                    <div class="modal fade" id="editModal-@phone" tabindex="-1" role="dialog" aria-labelledby="editModalLabel-@phone" aria-hidden="true">
+                                        <div class="modal-dialog" role="dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    <form method="post" asp-page-handler="EditPhone">
+                                                        <input type="hidden" asp-for="editPhoneModel.NATIONALCODE" value="@Model.PersonId" readonly />
+                                                        <div class="form-group">
+                                                            <label>Phone</label>
+                                                            <input type="text" class="form-control" asp-for="editPhoneModel.TEL" value="@phone" />
+                                                        </div>
+                                                        
+                                                        <button type="submit" class="btn btn-primary">Save</button>
+
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal fade" id="deleteModal-@phone" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel-@phone" aria-hidden="true">
+                                        <div class="modal-dialog" role="alert">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    Are you sure you want to delete @phone?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <form method="post" asp-page-handler="DeletePhone">
+                                                        <input type="hidden" asp-for="deletePhoneModel.NATIONALCODE" value="@Model.PersonId" />
+                                                        <input type="hidden" asp-for="deletePhoneModel.TEL" value="@phone" />
+                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    @if (Model.result.iSuccess && !string.IsNullOrWhiteSpace(Model.result.Message))
+    {
+        <script>
+            swal.fire({
+                title: "Success",
+                text: "@Html.Raw(Model.result.Message)",
+                icon: "success"
+            });
+        </script>
+    }
+    else if (!Model.result.iSuccess && !string.IsNullOrWhiteSpace(Model.result.Message))
+    {
+        <script>
+            swal.fire({
+                title: "error",
+                text: "@Html.Raw(Model.result.Message)",
+                icon: "error"
+            });
+        </script>
+    }
+
+}
+
