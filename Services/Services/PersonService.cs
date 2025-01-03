@@ -124,5 +124,31 @@ namespace Services.Services
                 }
             }
         }
+
+        public async Task<ResultDto> AddPhoneAsync(AddPhoneDto addPhoneModel)
+        {
+            using(SqlConnection connection = new SqlConnection(_connection))
+            {
+                using(SqlCommand command = new SqlCommand("InsertTel", connection))
+                {
+                    try
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddWithValue("NATIONALCODE", addPhoneModel.NATIONALCODE);
+                        command.Parameters.AddWithValue("TEL", addPhoneModel.TEL);
+                        await connection.OpenAsync();
+                        int rows = await command.ExecuteNonQueryAsync();
+                        if (rows > 0)
+                            return new ResultDto(true, "PhoneNumber Added Successfully");
+                        return new ResultDto(false, "Error in Adding PhoneNumber");
+                    }
+                    catch
+                    {
+                        return new ResultDto(false, "This PhoneNumber Already Exist");
+                    }
+
+                }
+            }
+        }
     }
 }

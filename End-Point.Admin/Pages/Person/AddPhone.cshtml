@@ -1,0 +1,69 @@
+﻿@page
+@model End_Point.Admin.Pages.Person.AddPhoneModel
+@{
+}
+<div class="container-fluid">
+    <h5 class="title text-center">Add Phone To Person Form</h5>
+    <div class="row justify-content-center">
+
+        <div class="card col-8" style="margin: 10px 0px;">
+            <div class="card-body">
+                <form method="post" asp-page-handler="FindPerson">
+                    <label class="mr-2">National Code</label>
+                    <div class="form-group d-flex align-items-center">
+                        <input type="text" name="NationalCode" class="form-control mr-2" placeholder="National code">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
+                @if (!string.IsNullOrWhiteSpace(Model.FullName))
+                {
+                    <div class="form-control mt-2">
+                        <label>Person's Name</label>
+                        <input value="@Model.FullName" disabled class="form-control" />
+                    </div>
+                }
+            </div>
+        </div>
+        @if (!string.IsNullOrWhiteSpace(Model.FullName))
+        {
+            <div class="card col-8" style="margin: 10px 0px;">
+                <div class="card-body">
+                    <form method="post" asp-page-handler="AddPhone" class="row justify-content-center">
+                        <input type="hidden" value="@Model.PersonId" asp-for="addPhoneModel.NATIONALCODE"/>
+                        <div class="form-group col-8">
+                            <label asp-for="addPhoneModel.TEL"> Phone Number</label>
+                            <input asp-for="addPhoneModel.TEL" class="form-control" />
+                            <span asp-validation-for="addPhoneModel.TEL" class="text-danger"></span>
+                        </div>
+                        <button class="btn btn-primary mt-5" type="submit">Save</button>
+                    </form>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    @if (Model.result.iSuccess && !string.IsNullOrWhiteSpace(Model.result.Message))
+    {
+        <script>
+            swal.fire({
+                title: "Success",
+                text: "@Html.Raw(Model.result.Message)",
+                icon: "success"
+            });
+        </script>
+    }
+    else if (!Model.result.iSuccess && !string.IsNullOrWhiteSpace(Model.result.Message))
+    {
+        <script>
+            swal.fire({
+                title: "error",
+                text: "@Html.Raw(Model.result.Message)",
+                icon: "error"
+            });
+        </script>
+    }
+}
